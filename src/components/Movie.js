@@ -1,17 +1,11 @@
-import { gql, useMutation } from "@apollo/client";
-import React, { useState } from "react";
+import { gql, useReactiveVar } from "@apollo/client";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { likedIds } from "../apollo";
 
-const LIKE_MOVIE = gql`
-  mutation toggleLikeMoive($id: Int!, $isLiked: Boolean!) {
-    toggleLikeMovie(id: $id, isLiked: $isLiked) @client
-  }
-`;
-
 const Container = styled.div`
-  height: 400px;
+  height: 800px;
   border-radius: 7px;
   width: 100%;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -28,9 +22,15 @@ const Poster = styled.div`
 `;
 
 export default ({ id, bg, isLiked }) => {
-  const [toggleLike] = useMutation(LIKE_MOVIE, {
-    variables: { id: parseInt(id), isLiked: isLiked },
-  });
+  const curLikedIds = useReactiveVar(likedIds);
+
+  const toggleLike = () => {
+    if (isLiked) {
+      likedIds(curLikedIds.filter((t) => !(t === id)));
+    } else {
+      likedIds(curLikedIds.concat(id));
+    }
+  };
 
   return (
     <Container>

@@ -52,7 +52,7 @@ const Description = styled.p`
 
 const Poster = styled.div`
   width: 25%;
-  height: 60%;
+  height: 90%;
   background-color: transparent;
   background-image: url(${(props) => props.bg});
   background-size: cover;
